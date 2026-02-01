@@ -48,7 +48,7 @@ export function HeroSection() {
               asChild
               size="lg"
               variant="outline"
-              className="border-white text-white hover:bg-white hover:text-primary font-medium text-base"
+              className="border-white text-primary hover:bg-white hover:text-primary font-medium text-base"
             >
               <Link to="/contact">
                 <MessageCircle className="mr-2 h-5 w-5" />
