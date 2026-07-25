@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getSettings, type SiteSettings } from "@/lib/api";
 
 const navLinks = [
   { name: "Home", path: "/" },
@@ -15,6 +16,26 @@ const navLinks = [
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const [settings, setSettings] = useState<SiteSettings | null>(null);
+
+  useEffect(() => {
+    getSettings()
+      .then(setSettings)
+      .catch(() => setSettings(null));
+  }, []);
+
+  const companyName = settings?.company_name || "CKIM Homes & Estates";
+  const phone = settings?.phone || "+250780000000";
+  // Split "CKIM Homes & Estates" into a bold first word + smaller subtitle,
+  // matching the two-line logo lockup. Falls back gracefully for any name.
+  const [nameFirstWord, ...nameRest] = companyName.split(" ");
+  const nameSubtitle = nameRest.join(" ");
+  const logoInitials = companyName
+    .split(" ")
+    .map((w) => w[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 
   return (
     <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
@@ -22,12 +43,18 @@ export function Header() {
         <div className="flex h-16 md:h-20 items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-heading font-bold text-lg">CK</span>
+            <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center overflow-hidden flex-shrink-0">
+              {settings?.logo_url ? (
+                <img src={settings.logo_url} alt={companyName} className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-primary-foreground font-heading font-bold text-lg">{logoInitials}</span>
+              )}
             </div>
             <div className="hidden sm:block">
-              <span className="font-heading font-bold text-lg text-primary">CKIM</span>
-              <span className="font-heading text-sm block text-muted-foreground -mt-1">Homes & Estates</span>
+              <span className="font-heading font-bold text-lg text-primary">{nameFirstWord}</span>
+              {nameSubtitle && (
+                <span className="font-heading text-sm block text-muted-foreground -mt-1">{nameSubtitle}</span>
+              )}
             </div>
           </Link>
 
@@ -50,13 +77,15 @@ export function Header() {
 
           {/* CTA Button */}
           <div className="hidden md:flex items-center gap-4">
-            <a href="tel:+250780000000" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <a href={`tel:${phone}`} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
               <Phone className="h-4 w-4" />
-              <span>+250 780 000 000</span>
+              <span>{phone}</span>
             </a>
-            <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 font-medium">
-              List Property
-            </Button>
+            <Link to="/contact">
+              <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 font-medium">
+                List Property
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -87,9 +116,11 @@ export function Header() {
                   {link.name}
                 </Link>
               ))}
-              <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 font-medium w-full mt-2">
-                List Property
-              </Button>
+              <Link to="/contact" onClick={() => setIsMenuOpen(false)}>
+                <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 font-medium w-full mt-2">
+                  List Property
+                </Button>
+              </Link>
             </div>
           </nav>
         )}

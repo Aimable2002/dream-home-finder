@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
+import { signIn } from "@/lib/api";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -17,25 +18,23 @@ const AdminLogin = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
-    // Mock authentication - in real app, this would use Lovable Cloud auth
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    if (email === "admin@ckimhomes.rw" && password === "admin123") {
+
+    try {
+      await signIn(email, password);
       toast({
         title: "Welcome back!",
         description: "You've successfully logged in.",
       });
       navigate("/admin/dashboard");
-    } else {
+    } catch (error) {
       toast({
         title: "Login failed",
-        description: "Invalid email or password.",
+        description: error instanceof Error ? error.message : "Invalid email or password.",
         variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
     }
-    
-    setIsLoading(false);
   };
 
   return (
@@ -105,11 +104,6 @@ const AdminLogin = () => {
             </Button>
           </form>
 
-          <div className="mt-6 text-center">
-            <p className="text-sm text-muted-foreground">
-              Demo credentials: admin@ckimhomes.rw / admin123
-            </p>
-          </div>
         </div>
 
         <p className="text-center text-sm text-muted-foreground mt-6">

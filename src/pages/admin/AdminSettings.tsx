@@ -1,49 +1,103 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Upload, Save, Building2, Phone, Mail, Globe, Facebook, Instagram, Twitter, Linkedin } from "lucide-react";
+import { Upload, Save, Building2, Phone, Mail, Globe, Facebook, Instagram, Twitter, Linkedin, Loader2 } from "lucide-react";
+import { getSettings, updateSettings, uploadLogo, type SiteSettings } from "@/lib/api";
+
+const emptySettings: Omit<SiteSettings, "id" | "updated_at"> = {
+  company_name: "",
+  logo_url: null,
+  logo_storage_path: null,
+  email: "",
+  phone: "",
+  whatsapp: "",
+  address: "",
+  website: "",
+  facebook: "",
+  instagram: "",
+  twitter: "",
+  linkedin: "",
+  stats_properties_listed: "",
+  stats_happy_clients: "",
+  stats_years_experience: "",
+};
 
 const AdminSettings = () => {
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [logo, setLogo] = useState<string | null>(null);
-  const [settings, setSettings] = useState({
-    companyName: "CKIM Homes & Estates",
-    email: "info@ckimhomes.rw",
-    phone: "+250 780 000 000",
-    whatsapp: "+250780000000",
-    address: "KG 123 Street, Nyarugenge District, Kigali, Rwanda",
-    website: "www.ckimhomes.rw",
-    facebook: "https://facebook.com/ckimhomes",
-    instagram: "https://instagram.com/ckimhomes",
-    twitter: "https://twitter.com/ckimhomes",
-    linkedin: "https://linkedin.com/company/ckimhomes",
-  });
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [logoPreview, setLogoPreview] = useState<string | null>(null);
+  const [settings, setSettings] = useState(emptySettings);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const data = await getSettings();
+        setSettings(data);
+      } catch (error) {
+        toast({
+          title: "Couldn't load settings",
+          description: error instanceof Error ? error.message : "Something went wrong.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setLogo(URL.createObjectURL(file));
+      setLogoFile(file);
+      setLogoPreview(URL.createObjectURL(file));
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    toast({
-      title: "Settings Saved",
-      description: "Your settings have been updated successfully.",
-    });
-    
-    setIsSubmitting(false);
+
+    try {
+      let logoUrl = settings.logo_url;
+      let logoPath = settings.logo_storage_path;
+      if (logoFile) {
+        const uploaded = await uploadLogo(logoFile);
+        logoUrl = uploaded.url;
+        logoPath = uploaded.path;
+      }
+
+      const updated = await updateSettings({ ...settings, logo_url: logoUrl, logo_storage_path: logoPath });
+      setSettings(updated);
+      setLogoFile(null);
+
+      toast({ title: "Settings Saved", description: "Your settings have been updated successfully." });
+    } catch (error) {
+      toast({
+        title: "Couldn't save settings",
+        description: error instanceof Error ? error.message : "Something went wrong.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  if (isLoading) {
+    return (
+      <AdminLayout>
+        <div className="flex items-center justify-center py-24">
+          <Loader2 className="h-8 w-8 animate-spin text-secondary" />
+        </div>
+      </AdminLayout>
+    );
+  }
 
   return (
     <AdminLayout>
@@ -62,8 +116,8 @@ const AdminSettings = () => {
             <CardContent>
               <div className="flex items-center gap-6">
                 <div className="h-24 w-24 rounded-xl bg-primary flex items-center justify-center overflow-hidden">
-                  {logo ? (
-                    <img src={logo} alt="Logo" className="w-full h-full object-cover" />
+                  {logoPreview || settings.logo_url ? (
+                    <img src={logoPreview ?? settings.logo_url ?? ""} alt="Logo" className="w-full h-full object-cover" />
                   ) : (
                     <span className="text-primary-foreground font-heading font-bold text-2xl">CK</span>
                   )}
@@ -72,16 +126,9 @@ const AdminSettings = () => {
                   <label className="inline-flex items-center gap-2 bg-muted px-4 py-2 rounded-lg cursor-pointer hover:bg-muted/80 transition-colors">
                     <Upload className="h-5 w-5" />
                     <span>Upload New Logo</span>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleLogoUpload}
-                      className="hidden"
-                    />
+                    <input type="file" accept="image/*" onChange={handleLogoUpload} className="hidden" />
                   </label>
-                  <p className="text-sm text-muted-foreground mt-2">
-                    Recommended: 200x200px, PNG or JPG
-                  </p>
+                  <p className="text-sm text-muted-foreground mt-2">Recommended: 200x200px, PNG or JPG</p>
                 </div>
               </div>
             </CardContent>
@@ -100,15 +147,15 @@ const AdminSettings = () => {
                 <Label htmlFor="companyName">Company Name</Label>
                 <Input
                   id="companyName"
-                  value={settings.companyName}
-                  onChange={(e) => setSettings({ ...settings, companyName: e.target.value })}
+                  value={settings.company_name}
+                  onChange={(e) => setSettings({ ...settings, company_name: e.target.value })}
                 />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="address">Address</Label>
                 <Input
                   id="address"
-                  value={settings.address}
+                  value={settings.address ?? ""}
                   onChange={(e) => setSettings({ ...settings, address: e.target.value })}
                 />
               </div>
@@ -118,7 +165,7 @@ const AdminSettings = () => {
                   <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                   <Input
                     id="website"
-                    value={settings.website}
+                    value={settings.website ?? ""}
                     onChange={(e) => setSettings({ ...settings, website: e.target.value })}
                     className="pl-10"
                   />
@@ -144,7 +191,7 @@ const AdminSettings = () => {
                     <Input
                       id="email"
                       type="email"
-                      value={settings.email}
+                      value={settings.email ?? ""}
                       onChange={(e) => setSettings({ ...settings, email: e.target.value })}
                       className="pl-10"
                     />
@@ -156,7 +203,7 @@ const AdminSettings = () => {
                     <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                     <Input
                       id="phone"
-                      value={settings.phone}
+                      value={settings.phone ?? ""}
                       onChange={(e) => setSettings({ ...settings, phone: e.target.value })}
                       className="pl-10"
                     />
@@ -167,10 +214,48 @@ const AdminSettings = () => {
                 <Label htmlFor="whatsapp">WhatsApp Number</Label>
                 <Input
                   id="whatsapp"
-                  value={settings.whatsapp}
+                  value={settings.whatsapp ?? ""}
                   onChange={(e) => setSettings({ ...settings, whatsapp: e.target.value })}
                   placeholder="+250780000000 (without spaces)"
                 />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Homepage Stats */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Homepage Stats</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid sm:grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="statsProperties">Properties Listed</Label>
+                  <Input
+                    id="statsProperties"
+                    value={settings.stats_properties_listed ?? ""}
+                    onChange={(e) => setSettings({ ...settings, stats_properties_listed: e.target.value })}
+                    placeholder="500+"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="statsClients">Happy Clients</Label>
+                  <Input
+                    id="statsClients"
+                    value={settings.stats_happy_clients ?? ""}
+                    onChange={(e) => setSettings({ ...settings, stats_happy_clients: e.target.value })}
+                    placeholder="1,200+"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="statsYears">Years Experience</Label>
+                  <Input
+                    id="statsYears"
+                    value={settings.stats_years_experience ?? ""}
+                    onChange={(e) => setSettings({ ...settings, stats_years_experience: e.target.value })}
+                    placeholder="15+"
+                  />
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -188,7 +273,7 @@ const AdminSettings = () => {
                     <Facebook className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                     <Input
                       id="facebook"
-                      value={settings.facebook}
+                      value={settings.facebook ?? ""}
                       onChange={(e) => setSettings({ ...settings, facebook: e.target.value })}
                       className="pl-10"
                     />
@@ -200,7 +285,7 @@ const AdminSettings = () => {
                     <Instagram className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                     <Input
                       id="instagram"
-                      value={settings.instagram}
+                      value={settings.instagram ?? ""}
                       onChange={(e) => setSettings({ ...settings, instagram: e.target.value })}
                       className="pl-10"
                     />
@@ -212,7 +297,7 @@ const AdminSettings = () => {
                     <Twitter className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                     <Input
                       id="twitter"
-                      value={settings.twitter}
+                      value={settings.twitter ?? ""}
                       onChange={(e) => setSettings({ ...settings, twitter: e.target.value })}
                       className="pl-10"
                     />
@@ -224,7 +309,7 @@ const AdminSettings = () => {
                     <Linkedin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                     <Input
                       id="linkedin"
-                      value={settings.linkedin}
+                      value={settings.linkedin ?? ""}
                       onChange={(e) => setSettings({ ...settings, linkedin: e.target.value })}
                       className="pl-10"
                     />
@@ -236,9 +321,9 @@ const AdminSettings = () => {
 
           {/* Submit */}
           <div className="flex gap-4">
-            <Button 
-              type="submit" 
-              size="lg" 
+            <Button
+              type="submit"
+              size="lg"
               className="bg-secondary text-secondary-foreground hover:bg-secondary/90"
               disabled={isSubmitting}
             >

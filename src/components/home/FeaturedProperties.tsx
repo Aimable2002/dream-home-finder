@@ -1,91 +1,22 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { PropertyCard } from "@/components/property/PropertyCard";
-import { ArrowRight } from "lucide-react";
-
-// Mock data - will be replaced with real data from the backend
-const mockProperties = [
-  {
-    id: "1",
-    title: "Modern Villa in Nyarutarama",
-    price: 350000,
-    location: "Nyarutarama, Kigali",
-    type: "sale" as const,
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop",
-    bedrooms: 5,
-    bathrooms: 4,
-    parking: 2,
-    size: 450,
-    isBestDeal: false,
-  },
-  {
-    id: "2",
-    title: "Cozy Apartment in Kacyiru",
-    price: 1200,
-    location: "Kacyiru, Kigali",
-    type: "rent" as const,
-    image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053&auto=format&fit=crop",
-    bedrooms: 2,
-    bathrooms: 2,
-    parking: 1,
-    size: 120,
-    isBestDeal: true,
-  },
-  {
-    id: "3",
-    title: "Executive House in Kibagabaga",
-    price: 280000,
-    location: "Kibagabaga, Kigali",
-    type: "sale" as const,
-    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2075&auto=format&fit=crop",
-    bedrooms: 4,
-    bathrooms: 3,
-    parking: 2,
-    size: 380,
-    isBestDeal: false,
-  },
-  {
-    id: "4",
-    title: "Luxury Penthouse in Kiyovu",
-    price: 2500,
-    location: "Kiyovu, Kigali",
-    type: "rent" as const,
-    image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070&auto=format&fit=crop",
-    bedrooms: 3,
-    bathrooms: 2,
-    parking: 1,
-    size: 200,
-    isBestDeal: true,
-  },
-  {
-    id: "5",
-    title: "Family Home in Kimironko",
-    price: 195000,
-    location: "Kimironko, Kigali",
-    type: "sale" as const,
-    image: "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?q=80&w=2084&auto=format&fit=crop",
-    bedrooms: 4,
-    bathrooms: 3,
-    parking: 2,
-    size: 320,
-    isBestDeal: false,
-  },
-  {
-    id: "6",
-    title: "Studio Apartment in Remera",
-    price: 800,
-    location: "Remera, Kigali",
-    type: "rent" as const,
-    image: "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=2070&auto=format&fit=crop",
-    bedrooms: 1,
-    bathrooms: 1,
-    parking: 0,
-    size: 55,
-    isBestDeal: false,
-  },
-];
+import { ArrowRight, Loader2 } from "lucide-react";
+import { getProperties, type PropertyWithImages } from "@/lib/api";
+import { toPropertyCardProps } from "@/lib/property-utils";
 
 export function FeaturedProperties() {
+  const [properties, setProperties] = useState<PropertyWithImages[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    getProperties({ limit: 6 })
+      .then(setProperties)
+      .catch(() => setProperties([]))
+      .finally(() => setIsLoading(false));
+  }, []);
+
   return (
     <section className="py-16 md:py-20">
       <div className="container-custom">
@@ -111,11 +42,21 @@ export function FeaturedProperties() {
         </div>
 
         {/* Properties Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {mockProperties.map((property) => (
-            <PropertyCard key={property.id} {...property} />
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="flex items-center justify-center py-16">
+            <Loader2 className="h-8 w-8 animate-spin text-secondary" />
+          </div>
+        ) : properties.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {properties.map((property) => (
+              <PropertyCard key={property.id} {...toPropertyCardProps(property)} />
+            ))}
+          </div>
+        ) : (
+          <p className="text-muted-foreground text-center py-16">
+            No properties listed yet. Check back soon.
+          </p>
+        )}
       </div>
     </section>
   );

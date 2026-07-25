@@ -1,5 +1,7 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Facebook, Instagram, Twitter, Linkedin } from "lucide-react";
+import { getSettings, type SiteSettings } from "@/lib/api";
 
 const quickLinks = [
   { name: "Properties", path: "/properties" },
@@ -16,6 +18,26 @@ const propertyTypes = [
 ];
 
 export function Footer() {
+  const [settings, setSettings] = useState<SiteSettings | null>(null);
+
+  useEffect(() => {
+    getSettings()
+      .then(setSettings)
+      .catch(() => setSettings(null));
+  }, []);
+
+  const companyName = settings?.company_name || "CKIM Homes & Estates";
+  const phone = settings?.phone || "+250780000000";
+  const email = settings?.email || "info@ckimhomes.rw";
+  const address = settings?.address || "Kigali, Rwanda";
+
+  const socialLinks = [
+    { icon: Facebook, href: settings?.facebook, label: "Facebook" },
+    { icon: Instagram, href: settings?.instagram, label: "Instagram" },
+    { icon: Twitter, href: settings?.twitter, label: "Twitter" },
+    { icon: Linkedin, href: settings?.linkedin, label: "LinkedIn" },
+  ].filter((s) => s.href);
+
   return (
     <footer className="bg-primary text-primary-foreground">
       <div className="container-custom py-12 md:py-16">
@@ -23,8 +45,12 @@ export function Footer() {
           {/* Brand Column */}
           <div className="lg:col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-4">
-              <div className="h-10 w-10 rounded-lg bg-secondary flex items-center justify-center">
-                <span className="text-secondary-foreground font-heading font-bold text-lg">CK</span>
+              <div className="h-10 w-10 rounded-lg bg-secondary flex items-center justify-center overflow-hidden">
+                {settings?.logo_url ? (
+                  <img src={settings.logo_url} alt={companyName} className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-secondary-foreground font-heading font-bold text-lg">CK</span>
+                )}
               </div>
               <div>
                 <span className="font-heading font-bold text-lg text-white">CKIM</span>
@@ -34,20 +60,22 @@ export function Footer() {
             <p className="text-primary-foreground/80 text-sm leading-relaxed mb-6">
               Your trusted partner for premium real estate in Rwanda. Serving local and diaspora clients worldwide.
             </p>
-            <div className="flex gap-4">
-              <a href="#" className="p-2 rounded-full bg-primary-foreground/10 hover:bg-secondary transition-colors" aria-label="Facebook">
-                <Facebook className="h-4 w-4" />
-              </a>
-              <a href="#" className="p-2 rounded-full bg-primary-foreground/10 hover:bg-secondary transition-colors" aria-label="Instagram">
-                <Instagram className="h-4 w-4" />
-              </a>
-              <a href="#" className="p-2 rounded-full bg-primary-foreground/10 hover:bg-secondary transition-colors" aria-label="Twitter">
-                <Twitter className="h-4 w-4" />
-              </a>
-              <a href="#" className="p-2 rounded-full bg-primary-foreground/10 hover:bg-secondary transition-colors" aria-label="LinkedIn">
-                <Linkedin className="h-4 w-4" />
-              </a>
-            </div>
+            {socialLinks.length > 0 && (
+              <div className="flex gap-4">
+                {socialLinks.map(({ icon: Icon, href, label }) => (
+                  <a
+                    key={label}
+                    href={href!}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-full bg-primary-foreground/10 hover:bg-secondary transition-colors"
+                    aria-label={label}
+                  >
+                    <Icon className="h-4 w-4" />
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Quick Links */}
@@ -90,21 +118,18 @@ export function Footer() {
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
                 <MapPin className="h-5 w-5 text-secondary flex-shrink-0 mt-0.5" />
-                <span className="text-primary-foreground/80 text-sm">
-                  Kigali, Rwanda<br />
-                  KG 123 Street, Nyarugenge
-                </span>
+                <span className="text-primary-foreground/80 text-sm">{address}</span>
               </li>
               <li>
-                <a href="tel:+250780000000" className="flex items-center gap-3 text-primary-foreground/80 hover:text-secondary transition-colors text-sm">
+                <a href={`tel:${phone}`} className="flex items-center gap-3 text-primary-foreground/80 hover:text-secondary transition-colors text-sm">
                   <Phone className="h-5 w-5 text-secondary flex-shrink-0" />
-                  +250 780 000 000
+                  {phone}
                 </a>
               </li>
               <li>
-                <a href="mailto:info@ckimhomes.rw" className="flex items-center gap-3 text-primary-foreground/80 hover:text-secondary transition-colors text-sm">
+                <a href={`mailto:${email}`} className="flex items-center gap-3 text-primary-foreground/80 hover:text-secondary transition-colors text-sm">
                   <Mail className="h-5 w-5 text-secondary flex-shrink-0" />
-                  info@ckimhomes.rw
+                  {email}
                 </a>
               </li>
             </ul>
@@ -114,7 +139,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-primary-foreground/20 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-primary-foreground/60 text-sm">
-            © {new Date().getFullYear()} CKIM Homes & Estates. All rights reserved.
+            © {new Date().getFullYear()} {companyName}. All rights reserved.
           </p>
           <div className="flex gap-6 text-sm">
             <Link to="/privacy" className="text-primary-foreground/60 hover:text-secondary transition-colors">

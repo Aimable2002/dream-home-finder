@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,101 +22,97 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Search, Edit, Trash2, Eye, Star, Building2 } from "lucide-react";
+import { Search, Edit, Trash2, Eye, Star, Building2, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-
-const mockProperties = [
-  {
-    id: "1",
-    title: "Modern Villa in Kigali Heights",
-    price: 450000,
-    location: "Kigali Heights, Kigali",
-    type: "sale",
-    isBestDeal: true,
-    image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=200",
-    createdAt: "2024-01-15",
-  },
-  {
-    id: "2",
-    title: "Luxury Apartment Nyarutarama",
-    price: 1500,
-    location: "Nyarutarama, Kigali",
-    type: "rent",
-    isBestDeal: false,
-    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=200",
-    createdAt: "2024-01-12",
-  },
-  {
-    id: "3",
-    title: "Elegant Family Home",
-    price: 320000,
-    location: "Kimihurura, Kigali",
-    type: "sale",
-    isBestDeal: true,
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=200",
-    createdAt: "2024-01-10",
-  },
-  {
-    id: "4",
-    title: "Premium Penthouse Suite",
-    price: 3500,
-    location: "Kigali City Center",
-    type: "rent",
-    isBestDeal: true,
-    image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=200",
-    createdAt: "2024-01-08",
-  },
-  {
-    id: "5",
-    title: "Hillside Contemporary Home",
-    price: 520000,
-    location: "Rebero, Kigali",
-    type: "sale",
-    isBestDeal: false,
-    image: "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=200",
-    createdAt: "2024-01-05",
-  },
-];
+import {
+  getProperties,
+  deleteProperty,
+  deletePropertyImage,
+  toggleBestDeal,
+  type PropertyWithImages,
+} from "@/lib/api";
 
 const ManageProperties = () => {
   const { toast } = useToast();
-  const [properties, setProperties] = useState(mockProperties);
+  const [properties, setProperties] = useState<PropertyWithImages[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterType, setFilterType] = useState("all");
 
+  const loadProperties = async () => {
+    setIsLoading(true);
+    try {
+      const data = await getProperties();
+      setProperties(data);
+    } catch (error) {
+      toast({
+        title: "Couldn't load properties",
+        description: error instanceof Error ? error.message : "Something went wrong.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadProperties();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const filteredProperties = properties.filter((property) => {
-    const matchesSearch = property.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    const matchesSearch =
+      property.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       property.location.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesType = filterType === "all" || property.type === filterType;
     return matchesSearch && matchesType;
   });
 
-  const handleDelete = (id: string) => {
-    setProperties(properties.filter(p => p.id !== id));
-    toast({
-      title: "Property Deleted",
-      description: "The property has been removed from your listings.",
-    });
+  const handleDelete = async (property: PropertyWithImages) => {
+    try {
+      // Remove storage files first, then the property (images cascade in DB).
+      await Promise.all(property.property_images.map((img) => deletePropertyImage(img)));
+      await deleteProperty(property.id);
+      setProperties((prev) => prev.filter((p) => p.id !== property.id));
+      toast({ title: "Property Deleted", description: "The property has been removed from your listings." });
+    } catch (error) {
+      toast({
+        title: "Couldn't delete property",
+        description: error instanceof Error ? error.message : "Something went wrong.",
+        variant: "destructive",
+      });
+    }
   };
 
-  const toggleBestDeal = (id: string) => {
-    setProperties(properties.map(p => 
-      p.id === id ? { ...p, isBestDeal: !p.isBestDeal } : p
-    ));
-    toast({
-      title: "Status Updated",
-      description: "Best deal status has been updated.",
-    });
+  const handleToggleBestDeal = async (property: PropertyWithImages) => {
+    try {
+      await toggleBestDeal(property.id, !property.is_best_deal);
+      setProperties((prev) =>
+        prev.map((p) => (p.id === property.id ? { ...p, is_best_deal: !p.is_best_deal } : p))
+      );
+      toast({ title: "Status Updated", description: "Best deal status has been updated." });
+    } catch (error) {
+      toast({
+        title: "Couldn't update status",
+        description: error instanceof Error ? error.message : "Something went wrong.",
+        variant: "destructive",
+      });
+    }
   };
 
   const formatPrice = (price: number, type: string) => {
-    const formatted = new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+    const formatted = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
       maximumFractionDigits: 0,
     }).format(price);
     return type === "rent" ? `${formatted}/mo` : formatted;
   };
+
+  const coverImage = (property: PropertyWithImages) =>
+    property.property_images.find((img) => img.is_cover)?.url ??
+    property.property_images[0]?.url ??
+    "/placeholder.svg";
 
   return (
     <AdminLayout>
@@ -169,15 +165,19 @@ const ManageProperties = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {filteredProperties.length > 0 ? (
+            {isLoading ? (
+              <div className="flex items-center justify-center py-12">
+                <Loader2 className="h-8 w-8 animate-spin text-secondary" />
+              </div>
+            ) : filteredProperties.length > 0 ? (
               <div className="space-y-4">
                 {filteredProperties.map((property) => (
-                  <div 
-                    key={property.id} 
+                  <div
+                    key={property.id}
                     className="flex flex-col sm:flex-row gap-4 p-4 rounded-xl border border-border hover:bg-muted/50 transition-colors"
                   >
-                    <img 
-                      src={property.image} 
+                    <img
+                      src={coverImage(property)}
                       alt={property.title}
                       className="w-full sm:w-32 h-24 object-cover rounded-lg"
                     />
@@ -191,10 +191,8 @@ const ManageProperties = () => {
                           <Badge className={property.type === "sale" ? "bg-primary" : "bg-blue-600"}>
                             {property.type === "sale" ? "For Sale" : "For Rent"}
                           </Badge>
-                          {property.isBestDeal && (
-                            <Badge className="bg-secondary text-secondary-foreground">
-                              Best Deal
-                            </Badge>
+                          {property.is_best_deal && (
+                            <Badge className="bg-secondary text-secondary-foreground">Best Deal</Badge>
                           )}
                         </div>
                       </div>
@@ -202,25 +200,27 @@ const ManageProperties = () => {
                         {formatPrice(property.price, property.type)}
                       </p>
                       <p className="text-xs text-muted-foreground mt-1">
-                        Added on {new Date(property.createdAt).toLocaleDateString()}
+                        Added on {new Date(property.created_at).toLocaleDateString()}
                       </p>
                     </div>
                     <div className="flex sm:flex-col gap-2 justify-end">
                       <Button variant="outline" size="sm" asChild>
-                        <a href={`/property/${property.id}`} target="_blank">
+                        <a href={`/property/${property.id}`} target="_blank" rel="noreferrer">
                           <Eye className="h-4 w-4" />
                         </a>
                       </Button>
-                      <Button 
-                        variant="outline" 
+                      <Button
+                        variant="outline"
                         size="sm"
-                        onClick={() => toggleBestDeal(property.id)}
-                        className={property.isBestDeal ? "text-secondary border-secondary" : ""}
+                        onClick={() => handleToggleBestDeal(property)}
+                        className={property.is_best_deal ? "text-secondary border-secondary" : ""}
                       >
-                        <Star className={`h-4 w-4 ${property.isBestDeal ? "fill-secondary" : ""}`} />
+                        <Star className={`h-4 w-4 ${property.is_best_deal ? "fill-secondary" : ""}`} />
                       </Button>
-                      <Button variant="outline" size="sm">
-                        <Edit className="h-4 w-4" />
+                      <Button variant="outline" size="sm" asChild>
+                        <a href={`/admin/edit-property/${property.id}`}>
+                          <Edit className="h-4 w-4" />
+                        </a>
                       </Button>
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
@@ -232,13 +232,14 @@ const ManageProperties = () => {
                           <AlertDialogHeader>
                             <AlertDialogTitle>Delete Property?</AlertDialogTitle>
                             <AlertDialogDescription>
-                              This action cannot be undone. This will permanently delete the property listing.
+                              This action cannot be undone. This will permanently delete the property
+                              listing and its images.
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction 
-                              onClick={() => handleDelete(property.id)}
+                            <AlertDialogAction
+                              onClick={() => handleDelete(property)}
                               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                             >
                               Delete
