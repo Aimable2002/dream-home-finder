@@ -1,19 +1,13 @@
 import { createClient } from "@supabase/supabase-js";
 
-// These are read from .env (see .env.example). Until you create a Supabase
-// project and fill in the real values, the app will run but every call in
-// src/lib/api.ts will fail — that's expected, there is no backend yet.
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
+// Values come from .env when set (see .env.example). The fallbacks below are
+// the project's public publishable/anon keys, which are safe to ship in
+// client code by design.
+const supabaseUrl =
+  (import.meta.env.VITE_SUPABASE_URL as string | undefined) ||
+  "https://seilaswjzerlycvqrwxz.supabase.co";
+const supabaseAnonKey =
+  (import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined) ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNlaWxhc3dqemVybHljdnFyd3h6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3ODc3MjgsImV4cCI6MjEwODM2MzcyOH0.I8TjURQOXsoVjEpKwvscugjZZzCyoqSne7Wx0KJL5FM";
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.warn(
-    "[supabase] VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY are not set. " +
-      "Copy .env.example to .env and fill in your Supabase project keys."
-  );
-}
-
-export const supabase = createClient(
-  supabaseUrl || "https://placeholder.supabase.co",
-  supabaseAnonKey || "placeholder-anon-key"
-);
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
