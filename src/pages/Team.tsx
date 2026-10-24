@@ -54,7 +54,7 @@ const Team = () => {
               Meet Our Team
             </h1>
             <p className="text-primary-foreground/80 text-lg md:text-xl max-w-2xl mx-auto">
-              The dedicated professionals behind CKIM Homes & Estates.
+              The dedicated professionals behind ImenaHomes.
               We're here to help you find your perfect property in Rwanda.
             </p>
           </div>
@@ -80,7 +80,7 @@ const Team = () => {
                             className="w-full h-full object-cover"
                           />
                         </div>
-                        <div className="p-8 md:p-12 flex flex-col justify-center">
+                        <div className="p-5 sm:p-8 md:p-12 flex flex-col justify-center">
                           <div className="inline-flex items-center gap-2 bg-secondary/10 text-secondary px-3 py-1 rounded-full text-sm font-medium w-fit mb-4">
                             <Award className="h-4 w-4" />
                             Leadership
@@ -94,7 +94,7 @@ const Team = () => {
                               {featuredMember.bio}
                             </p>
                           )}
-                          <div className="flex gap-3">
+                          <div className="flex flex-wrap gap-3">
                             {featuredMember.phone && (
                               <a
                                 href={`tel:${featuredMember.phone}`}
@@ -175,7 +175,7 @@ const Team = () => {
                 Our Values
               </h2>
               <p className="text-primary-foreground/80 max-w-xl mx-auto">
-                The principles that guide everything we do at CKIM Homes & Estates.
+                The principles that guide everything we do at ImenaHomes.
               </p>
             </div>
 

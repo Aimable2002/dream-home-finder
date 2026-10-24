@@ -181,7 +181,7 @@ const ManageProperties = () => {
                       alt={property.title}
                       className="w-full sm:w-32 h-24 object-cover rounded-lg"
                     />
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0 break-words">
                       <div className="flex flex-wrap items-start justify-between gap-2">
                         <div>
                           <h3 className="font-semibold">{property.title}</h3>
@@ -203,7 +203,7 @@ const ManageProperties = () => {
                         Added on {new Date(property.created_at).toLocaleDateString()}
                       </p>
                     </div>
-                    <div className="flex sm:flex-col gap-2 justify-end">
+                    <div className="flex flex-wrap sm:flex-col gap-2 justify-end">
                       <Button variant="outline" size="sm" asChild>
                         <a href={`/property/${property.id}`} target="_blank" rel="noreferrer">
                           <Eye className="h-4 w-4" />

@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* CKIM Homes & Estates Design System
+/* ImenaHomes Design System
    Brand: Luxury African Real Estate
    Colors: Deep Green, Gold, Neutrals
    Typography: Poppins (headings), Inter (body)
@@ -108,11 +108,12 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Inter', sans-serif;
+    overflow-wrap: anywhere;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Poppins', sans-serif;
-    @apply font-bold tracking-tight;
+    @apply font-bold tracking-normal;
   }
 }
 
@@ -146,6 +147,6 @@
   }
   
   .container-custom {
-    @apply max-w-[1440px] mx-auto px-4 md:px-6 lg:px-8;
+    @apply w-full min-w-0 max-w-[1440px] mx-auto px-4 md:px-6 lg:px-8;
   }
 }

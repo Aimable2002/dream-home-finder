@@ -66,7 +66,7 @@ const Contact = () => {
 
   const phone = settings?.phone || "+250780000000";
   const whatsapp = settings?.whatsapp || "250780000000";
-  const email = settings?.email || "info@ckimhomes.rw";
+  const email = settings?.email || "info@imenahomes.rw";
   const address = settings?.address || "KG 123 Street, Nyarugenge District, Kigali, Rwanda";
 
   const socialLinks = [
@@ -99,7 +99,7 @@ const Contact = () => {
           <div className="container-custom">
             <div className="grid lg:grid-cols-2 gap-12">
               {/* Contact Form */}
-              <div className="bg-background rounded-2xl p-8 md:p-10 shadow-sm border border-border">
+              <div className="bg-background rounded-2xl p-5 sm:p-8 md:p-10 shadow-sm border border-border">
                 <h2 className="font-heading text-2xl font-bold mb-2">Send us a Message</h2>
                 <p className="text-muted-foreground mb-8">
                   Fill out the form below and we'll respond within 24 hours.
@@ -168,16 +168,16 @@ const Contact = () => {
               {/* Contact Info */}
               <div className="space-y-8">
                 {/* Quick Contact */}
-                <div className="bg-primary rounded-2xl p-8 text-primary-foreground">
+                <div className="bg-primary rounded-2xl p-5 sm:p-8 text-primary-foreground">
                   <h3 className="font-heading text-xl font-bold mb-6">Quick Contact</h3>
                   <div className="space-y-4">
                     <a
                       href={`https://wa.me/${whatsapp}?text=Hi, I'm interested in your properties`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-4 p-4 bg-primary-foreground/10 rounded-xl hover:bg-primary-foreground/20 transition-colors"
+                      className="flex items-center gap-3 p-3 sm:p-4 bg-primary-foreground/10 rounded-xl hover:bg-primary-foreground/20 transition-colors"
                     >
-                      <div className="p-3 bg-emerald-600 rounded-lg">
+                      <div className="p-3 shrink-0 bg-emerald-600 rounded-lg">
                         <MessageCircle className="h-6 w-6 text-primary-foreground" />
                       </div>
                       <div>
@@ -187,9 +187,9 @@ const Contact = () => {
                     </a>
                     <a
                       href={`tel:${phone}`}
-                      className="flex items-center gap-4 p-4 bg-primary-foreground/10 rounded-xl hover:bg-primary-foreground/20 transition-colors"
+                      className="flex items-center gap-3 p-3 sm:p-4 bg-primary-foreground/10 rounded-xl hover:bg-primary-foreground/20 transition-colors"
                     >
-                      <div className="p-3 bg-secondary rounded-lg">
+                      <div className="p-3 shrink-0 bg-secondary rounded-lg">
                         <Phone className="h-6 w-6 text-secondary-foreground" />
                       </div>
                       <div>
@@ -201,7 +201,7 @@ const Contact = () => {
                 </div>
 
                 {/* Contact Details */}
-                <div className="bg-muted/50 rounded-2xl p-8">
+                <div className="bg-muted/50 rounded-2xl p-5 sm:p-8">
                   <h3 className="font-heading text-xl font-bold mb-6">Contact Information</h3>
                   <div className="space-y-6">
                     <div className="flex items-start gap-4">
@@ -219,7 +219,7 @@ const Contact = () => {
                       </div>
                       <div>
                         <p className="font-medium mb-1">Email</p>
-                        <a href={`mailto:${email}`} className="text-muted-foreground text-sm hover:text-secondary transition-colors">
+                        <a href={`mailto:${email}`} className="break-all text-muted-foreground text-sm hover:text-secondary transition-colors">
                           {email}
                         </a>
                       </div>
@@ -241,7 +241,7 @@ const Contact = () => {
 
                 {/* Social Links */}
                 {socialLinks.length > 0 && (
-                  <div className="bg-muted/50 rounded-2xl p-8">
+                  <div className="bg-muted/50 rounded-2xl p-5 sm:p-8">
                     <h3 className="font-heading text-xl font-bold mb-4">Follow Us</h3>
                     <p className="text-muted-foreground text-sm mb-6">
                       Stay updated with our latest properties and news.
@@ -250,10 +250,10 @@ const Contact = () => {
                       {socialLinks.map(({ icon: Icon, href, label }) => (
                         <a
                           key={label}
-                          href={href!}
+                          href={href ?? undefined}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+                          className="p-3 shrink-0 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
                           aria-label={label}
                         >
                           <Icon className="h-5 w-5" />

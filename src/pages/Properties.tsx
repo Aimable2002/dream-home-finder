@@ -78,7 +78,7 @@ const Properties = () => {
 
             {/* Search Bar */}
             <div className="max-w-2xl mx-auto flex gap-2">
-              <div className="relative flex-1">
+              <div className="relative flex-1 min-w-0">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                 <Input
                   placeholder="Search by location or property name..."
@@ -90,7 +90,8 @@ const Properties = () => {
               <Button
                 variant="secondary"
                 size="lg"
-                className="lg:hidden"
+                className="lg:hidden shrink-0"
+                aria-label="Toggle filters"
                 onClick={() => setShowFilters(!showFilters)}
               >
                 <SlidersHorizontal className="h-5 w-5" />
@@ -171,7 +172,7 @@ const Properties = () => {
             </aside>
 
             {/* Properties Grid */}
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               {/* Results Header */}
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                 <p className="text-muted-foreground">

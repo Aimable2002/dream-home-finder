@@ -32,7 +32,7 @@ const About = () => {
           <div className="container-custom relative z-10">
             <div className="max-w-3xl">
               <h1 className="font-heading text-4xl md:text-5xl font-bold text-primary-foreground mb-6">
-                About CKIM Homes & Estates
+                About ImenaHomes
               </h1>
               <p className="text-primary-foreground/80 text-lg md:text-xl leading-relaxed">
                 Rwanda's premier real estate partner, dedicated to helping local and diaspora 
@@ -72,7 +72,7 @@ const About = () => {
                   Your Trusted Real Estate Partner in Rwanda
                 </h2>
                 <p className="text-muted-foreground mb-6 leading-relaxed">
-                  CKIM Homes & Estates was founded with a simple mission: to provide exceptional 
+                  ImenaHomes was founded with a simple mission: to provide exceptional 
                   real estate services that bridge the gap between Rwanda's vibrant property market 
                   and clients worldwide.
                 </p>

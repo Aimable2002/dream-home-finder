@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { signIn } from "@/lib/api";
+import brandIcon from "@/assets/ihomes-icon.png";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -44,7 +45,7 @@ const AdminLogin = () => {
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-2">
             <div className="h-12 w-12 rounded-lg bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-heading font-bold text-xl">CK</span>
+              <img src={brandIcon} alt="IHomes" width={48} height={48} className="w-full h-full object-contain" />
             </div>
           </Link>
           <h1 className="font-heading text-2xl font-bold mt-4">Admin Login</h1>
@@ -52,7 +53,7 @@ const AdminLogin = () => {
         </div>
 
         {/* Login Form */}
-        <div className="bg-background rounded-2xl p-8 shadow-sm border border-border">
+        <div className="bg-background rounded-2xl p-5 sm:p-8 shadow-sm border border-border">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="email">Email Address</Label>
@@ -61,7 +62,7 @@ const AdminLogin = () => {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="admin@ckimhomes.rw"
+                  placeholder="admin@imenahomes.rw"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="pl-10"

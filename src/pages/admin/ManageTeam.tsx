@@ -135,7 +135,7 @@ const ManageTeam = () => {
                       alt={member.name}
                       className="w-20 h-20 object-cover rounded-full sm:rounded-lg"
                     />
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0 break-words">
                       <div className="flex flex-wrap items-start justify-between gap-2">
                         <div>
                           <h3 className="font-semibold">{member.name}</h3>
@@ -149,7 +149,7 @@ const ManageTeam = () => {
                         <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{member.bio}</p>
                       )}
                     </div>
-                    <div className="flex sm:flex-col gap-2 justify-end">
+                    <div className="flex flex-wrap sm:flex-col gap-2 justify-end">
                       <Button
                         variant="outline"
                         size="sm"

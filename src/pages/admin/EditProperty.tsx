@@ -211,7 +211,7 @@ const EditProperty = () => {
 
   return (
     <AdminLayout>
-      <div className="max-w-4xl">
+      <div className="w-full min-w-0 max-w-4xl">
         <div className="mb-8">
           <h1 className="font-heading text-3xl font-bold">Edit Property</h1>
           <p className="text-muted-foreground mt-1">Update the details for this listing.</p>
@@ -422,7 +422,7 @@ const EditProperty = () => {
           {/* Best Deal Toggle */}
           <Card>
             <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
+              <div className="flex items-start justify-between gap-4">
                 <div>
                   <Label htmlFor="bestDeal" className="text-base font-medium">Mark as Best Deal</Label>
                   <p className="text-sm text-muted-foreground mt-1">
@@ -439,7 +439,7 @@ const EditProperty = () => {
           </Card>
 
           {/* Submit */}
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-4">
             <Button
               type="submit"
               size="lg"

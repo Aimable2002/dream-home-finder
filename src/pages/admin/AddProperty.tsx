@@ -204,7 +204,7 @@ const AddProperty = () => {
 
   return (
     <AdminLayout>
-      <div className="max-w-4xl">
+      <div className="w-full min-w-0 max-w-4xl">
         <div className="mb-8">
           <h1 className="font-heading text-3xl font-bold">Add New</h1>
           <p className="text-muted-foreground mt-1">Choose what you're adding, then fill in the details.</p>
@@ -214,7 +214,7 @@ const AddProperty = () => {
         <Card className="mb-8">
           <CardContent className="pt-6">
             <Label className="mb-3 block">Category</Label>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <button
                 type="button"
                 onClick={() => setCategory("property")}
@@ -446,7 +446,7 @@ const AddProperty = () => {
             {/* Best Deal Toggle */}
             <Card>
               <CardContent className="pt-6">
-                <div className="flex items-center justify-between">
+                <div className="flex items-start justify-between gap-4">
                   <div>
                     <Label htmlFor="bestDeal" className="text-base font-medium">Mark as Best Deal</Label>
                     <p className="text-sm text-muted-foreground mt-1">
@@ -464,7 +464,7 @@ const AddProperty = () => {
             </Card>
 
             {/* Submit */}
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <Button
                 type="submit"
                 size="lg"
@@ -489,7 +489,7 @@ const AddProperty = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex items-center gap-6">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
                   <div className="h-24 w-24 rounded-xl bg-muted flex items-center justify-center overflow-hidden border border-border">
                     {avatarPreview ? (
                       <img src={avatarPreview} alt="" className="w-full h-full object-cover" />
@@ -560,7 +560,7 @@ const AddProperty = () => {
                     <Input
                       id="email"
                       type="email"
-                      placeholder="name@ckimhomes.rw"
+                      placeholder="name@imenahomes.rw"
                       value={teamData.email}
                       onChange={(e) => setTeamData({ ...teamData, email: e.target.value })}
                     />
@@ -580,7 +580,7 @@ const AddProperty = () => {
 
             <Card>
               <CardContent className="pt-6">
-                <div className="flex items-center justify-between">
+                <div className="flex items-start justify-between gap-4">
                   <div>
                     <Label htmlFor="featured" className="text-base font-medium">Feature on Team Page</Label>
                     <p className="text-sm text-muted-foreground mt-1">
@@ -596,7 +596,7 @@ const AddProperty = () => {
               </CardContent>
             </Card>
 
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <Button
                 type="submit"
                 size="lg"

@@ -40,7 +40,7 @@ export function PropertyCard({
   };
 
   return (
-    <Link to={`/property/${id}`}>
+    <Link to={`/property/${id}`} className="block min-w-0">
       <Card className="group overflow-hidden border-border hover:border-secondary/50 transition-all duration-300 hover:shadow-lg">
         {/* Image Container */}
         <div className="relative aspect-[4/3] overflow-hidden">
@@ -51,7 +51,7 @@ export function PropertyCard({
           />
           
           {/* Overlays */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-foreground/50 to-transparent" />
           
           {/* Type Badge */}
           <Badge
@@ -72,8 +72,8 @@ export function PropertyCard({
           )}
           
           {/* Price */}
-          <div className="absolute bottom-3 left-3">
-            <span className="text-white font-heading font-bold text-xl">
+          <div className="absolute bottom-3 left-3 right-3 break-words">
+            <span className="text-primary-foreground font-heading font-bold text-xl">
               {formatPrice(price)}
               {type === "rent" && <span className="text-sm font-normal">/mo</span>}
             </span>
@@ -92,7 +92,7 @@ export function PropertyCard({
           </div>
           
           {/* Features */}
-          <div className="flex items-center justify-between text-sm text-muted-foreground border-t border-border pt-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm text-muted-foreground border-t border-border pt-3">
             <div className="flex items-center gap-1">
               <Bed className="h-4 w-4" />
               <span>{bedrooms}</span>
