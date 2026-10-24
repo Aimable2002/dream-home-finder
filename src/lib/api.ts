@@ -308,11 +308,13 @@ export async function getHeroImages(): Promise<{ url: string; propertyTitle: str
     .eq("orientation", "landscape")
     .or("is_best_deal.eq.true,is_featured.eq.true", { foreignTable: "properties" });
   if (error) throw error;
-  type HeroRow = { url: string; properties: { title: string } | null };
-  return ((data ?? []) as HeroRow[]).map((row) => ({
-    url: row.url,
-    propertyTitle: row.properties?.title ?? "",
-  }));
+  return (data ?? []).map((row) => {
+    const property = Array.isArray(row.properties) ? row.properties[0] : row.properties;
+    return {
+      url: row.url,
+      propertyTitle: property?.title ?? "",
+    };
+  });
 }
 
 // ============================================================================
