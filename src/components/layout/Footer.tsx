@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Facebook, Instagram, Twitter, Linkedin } from "lucide-react";
 import { getSettings, type SiteSettings } from "@/lib/api";
+import brandIcon from "@/assets/ihomes-icon.png";
 
 const quickLinks = [
   { name: "Properties", path: "/properties" },
@@ -45,15 +46,15 @@ export function Footer() {
           {/* Brand Column */}
           <div className="lg:col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-4">
-              <div className="h-10 w-10 rounded-lg bg-secondary flex items-center justify-center overflow-hidden">
+              <div className="h-10 w-10 rounded-lg bg-secondary flex items-center justify-center overflow-hidden shrink-0">
                 {settings?.logo_url ? (
                   <img src={settings.logo_url} alt={companyName} className="w-full h-full object-cover" />
                 ) : (
-                  <span className="text-secondary-foreground font-heading font-bold text-lg">CK</span>
+                  <img src={brandIcon} alt="IHomes" width={40} height={40} loading="lazy" className="w-full h-full object-contain" />
                 )}
               </div>
               <div>
-                <span className="font-heading font-bold text-lg text-white">ImenaHomes</span>
+                <span className="font-heading font-bold text-lg text-primary-foreground break-words">{companyName}</span>
                 <span className="font-heading text-sm block text-primary-foreground/80 -mt-1">Homes & Estates</span>
               </div>
             </Link>
@@ -65,7 +66,7 @@ export function Footer() {
                 {socialLinks.map(({ icon: Icon, href, label }) => (
                   <a
                     key={label}
-                    href={href!}
+                    href={href ?? undefined}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="p-2 rounded-full bg-primary-foreground/10 hover:bg-secondary transition-colors"
@@ -121,13 +122,13 @@ export function Footer() {
                 <span className="text-primary-foreground/80 text-sm">{address}</span>
               </li>
               <li>
-                <a href={`tel:${phone}`} className="flex items-center gap-3 text-primary-foreground/80 hover:text-secondary transition-colors text-sm">
+                <a href={`tel:${phone}`} className="flex items-center gap-3 break-all text-primary-foreground/80 hover:text-secondary transition-colors text-sm">
                   <Phone className="h-5 w-5 text-secondary flex-shrink-0" />
                   {phone}
                 </a>
               </li>
               <li>
-                <a href={`mailto:${email}`} className="flex items-center gap-3 text-primary-foreground/80 hover:text-secondary transition-colors text-sm">
+                <a href={`mailto:${email}`} className="flex items-center gap-3 break-all text-primary-foreground/80 hover:text-secondary transition-colors text-sm">
                   <Mail className="h-5 w-5 text-secondary flex-shrink-0" />
                   {email}
                 </a>

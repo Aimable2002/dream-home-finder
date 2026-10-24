@@ -77,29 +77,29 @@ export function BestDealsCarousel() {
                 style={{ transform: `translateX(-${currentIndex * 100}%)` }}
               >
                 {deals.map((deal) => (
-                  <div key={deal.id} className="min-w-full">
+                  <div key={deal.id} className="w-full min-w-full shrink-0">
                     <Link to={`/property/${deal.id}`} className="block">
-                      <div className="relative aspect-[21/9] md:aspect-[3/1]">
+                      <div className="relative aspect-[4/5] sm:aspect-[16/9] md:aspect-[3/1]">
                         <img
                           src={coverImageUrl(deal)}
                           alt={deal.title}
                           className="w-full h-full object-cover"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-foreground/70 via-foreground/40 to-transparent" />
 
                         {/* Content */}
                         <div className="absolute inset-0 flex items-center">
                           <div className="container-custom">
-                            <div className="max-w-xl">
+                            <div className="max-w-xl min-w-0 px-4 sm:px-8">
                               <DealBadge text="HOT OFFER" />
-                              <h3 className="font-heading font-bold text-2xl md:text-4xl text-white mt-4 mb-3">
+                              <h3 className="font-heading font-bold text-2xl md:text-4xl text-primary-foreground line-clamp-2 mt-4 mb-3">
                                 {deal.title}
                               </h3>
-                              <div className="flex items-center gap-2 text-white/80 mb-4">
+                              <div className="flex items-center gap-2 text-primary-foreground/80 mb-4">
                                 <MapPin className="h-5 w-5 text-secondary" />
                                 <span>{deal.location}</span>
                               </div>
-                              <div className="text-3xl md:text-4xl font-heading font-bold text-secondary">
+                              <div className="text-2xl sm:text-3xl md:text-4xl break-words font-heading font-bold text-secondary">
                                 {formatPrice(deal.price, deal.type)}
                               </div>
                               <Button
@@ -122,14 +122,14 @@ export function BestDealsCarousel() {
                 {/* Navigation Arrows */}
                 <button
                   onClick={prevSlide}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-colors"
+                  className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-primary-foreground/20 backdrop-blur-sm text-primary-foreground hover:bg-primary-foreground/30 transition-colors"
                   aria-label="Previous slide"
                 >
                   <ChevronLeft className="h-6 w-6" />
                 </button>
                 <button
                   onClick={nextSlide}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-colors"
+                  className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-primary-foreground/20 backdrop-blur-sm text-primary-foreground hover:bg-primary-foreground/30 transition-colors"
                   aria-label="Next slide"
                 >
                   <ChevronRight className="h-6 w-6" />
@@ -144,7 +144,7 @@ export function BestDealsCarousel() {
                       className={`w-2 h-2 rounded-full transition-all ${
                         index === currentIndex
                           ? "bg-secondary w-6"
-                          : "bg-white/50 hover:bg-white/70"
+                          : "bg-primary-foreground/50 hover:bg-primary-foreground/70"
                       }`}
                       aria-label={`Go to slide ${index + 1}`}
                     />

@@ -75,7 +75,7 @@ export function HeroSection() {
   const backgroundImage = slides[slideIndex] ?? FALLBACK_IMAGE;
 
   return (
-    <section className="relative min-h-[600px] md:min-h-[700px] flex items-center overflow-hidden">
+    <section className="relative min-h-[600px] md:min-h-[700px] py-12 flex items-center overflow-hidden">
       {/* Background Image */}
       <div
         key={backgroundImage}
@@ -92,12 +92,12 @@ export function HeroSection() {
             Premier Real Estate in Rwanda
           </span>
 
-          <h1 className="heading-1 text-white mb-6 leading-tight">
+          <h1 className="heading-1 text-primary-foreground mb-6 leading-tight">
             Find Your Perfect
             <span className="block text-secondary">Home in Rwanda</span>
           </h1>
 
-          <p className="body-large text-white/90 mb-8 max-w-xl">
+          <p className="body-large text-primary-foreground/90 mb-8 max-w-xl">
             Buy, rent, or invest with confidence through ImenaHomes.
             Your trusted partner serving Rwanda and the global diaspora community.
           </p>
@@ -118,7 +118,7 @@ export function HeroSection() {
               asChild
               size="lg"
               variant="outline"
-              className="border-white text-primary hover:bg-white hover:text-primary font-medium text-base"
+              className="border-primary-foreground text-primary hover:bg-primary-foreground hover:text-primary font-medium text-base"
             >
               <Link to="/contact">
                 <MessageCircle className="mr-2 h-5 w-5" />
@@ -128,18 +128,18 @@ export function HeroSection() {
           </div>
 
           {/* Stats */}
-          <div className="flex flex-wrap gap-8 mt-12 pt-8 border-t border-white/20">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 mt-8 pt-8 border-t border-primary-foreground/20">
             <div>
               <span className="block text-3xl font-heading font-bold text-secondary">{stats.properties}</span>
-              <span className="text-white/80 text-sm">Properties Listed</span>
+              <span className="text-primary-foreground/80 text-sm">Properties Listed</span>
             </div>
             <div>
               <span className="block text-3xl font-heading font-bold text-secondary">{stats.clients}</span>
-              <span className="text-white/80 text-sm">Happy Clients</span>
+              <span className="text-primary-foreground/80 text-sm">Happy Clients</span>
             </div>
             <div>
               <span className="block text-3xl font-heading font-bold text-secondary">{stats.years}</span>
-              <span className="text-white/80 text-sm">Years Experience</span>
+              <span className="text-primary-foreground/80 text-sm">Years Experience</span>
             </div>
           </div>
         </div>
@@ -152,7 +152,7 @@ export function HeroSection() {
             <span
               key={index}
               className={`h-1.5 rounded-full transition-all ${
-                index === slideIndex ? "w-6 bg-secondary" : "w-1.5 bg-white/50"
+                index === slideIndex ? "w-6 bg-secondary" : "w-1.5 bg-primary-foreground/50"
               }`}
             />
           ))}

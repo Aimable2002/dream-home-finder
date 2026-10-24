@@ -99,12 +99,12 @@ const PropertyDetails = () => {
         {/* Breadcrumb */}
         <div className="bg-muted/30 py-4">
           <div className="container-custom">
-            <nav className="flex items-center gap-2 text-sm text-muted-foreground">
+            <nav className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
               <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
               <span>/</span>
               <Link to="/properties" className="hover:text-foreground transition-colors">Properties</Link>
               <span>/</span>
-              <span className="text-foreground">{property.title}</span>
+              <span className="min-w-0 break-words text-foreground">{property.title}</span>
             </nav>
           </div>
         </div>
@@ -112,7 +112,7 @@ const PropertyDetails = () => {
         <div className="container-custom py-8">
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Main Content */}
-            <div className="lg:col-span-2 space-y-8">
+            <div className="lg:col-span-2 min-w-0 space-y-8">
               {/* Image Gallery */}
               <div className="relative rounded-xl overflow-hidden">
                 <div
@@ -200,12 +200,12 @@ const PropertyDetails = () => {
                   </div>
                 </div>
 
-                <p className="text-3xl md:text-4xl font-bold text-secondary mb-6">
+                <p className="text-2xl sm:text-3xl md:text-4xl break-words font-bold text-secondary mb-6">
                   {formatPrice(property.price, property.type)}
                 </p>
 
                 {/* Features Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 bg-muted/50 rounded-xl mb-8">
+                <div className="grid grid-cols-1 min-[375px]:grid-cols-2 sm:grid-cols-4 gap-4 p-4 bg-muted/50 rounded-xl mb-8">
                   <div className="flex items-center gap-3">
                     <div className="p-2 bg-background rounded-lg">
                       <Bed className="h-5 w-5 text-secondary" />

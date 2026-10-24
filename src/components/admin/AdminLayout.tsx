@@ -14,6 +14,7 @@ import {
 import { useEffect, useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { signOut } from "@/lib/api";
+import brandIcon from "@/assets/ihomes-icon.png";
 
 const navItems = [
   { name: "Dashboard", path: "/admin/dashboard", icon: LayoutDashboard },
@@ -61,7 +62,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
       {/* Mobile backdrop */}
       {isMobile && sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40"
+          className="fixed inset-0 bg-foreground/50 z-40"
           onClick={() => setSidebarOpen(false)}
           aria-hidden="true"
         />
@@ -75,13 +76,13 @@ export function AdminLayout({ children }: AdminLayoutProps) {
                 sidebarOpen ? "translate-x-0" : "-translate-x-full"
               }`
             : `${collapsed ? "w-20" : "w-64"} relative transition-all duration-300`
-        } bg-primary text-primary-foreground flex flex-col h-full`}
+        } bg-primary text-primary-foreground flex flex-col min-h-screen shrink-0`}
       >
         {/* Logo */}
         <div className="p-4 border-b border-primary-foreground/20 flex items-center justify-between">
           <Link to="/admin/dashboard" className="flex items-center gap-3" onClick={closeOnMobile}>
             <div className="h-10 w-10 rounded-lg bg-secondary flex items-center justify-center flex-shrink-0">
-              <span className="text-secondary-foreground font-heading font-bold text-lg">CK</span>
+              <img src={brandIcon} alt="IHomes" width={40} height={40} className="w-full h-full object-contain" />
             </div>
             {(!collapsed || isMobile) && (
               <div>

@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { Upload, Save, Building2, Phone, Mail, Globe, Facebook, Instagram, Twitter, Linkedin, Loader2 } from "lucide-react";
 import { getSettings, updateSettings, uploadLogo, type SiteSettings } from "@/lib/api";
+import brandIcon from "@/assets/ihomes-icon.png";
 
 const emptySettings: Omit<SiteSettings, "id" | "updated_at"> = {
   company_name: "",
@@ -101,7 +102,7 @@ const AdminSettings = () => {
 
   return (
     <AdminLayout>
-      <div className="max-w-3xl">
+      <div className="w-full min-w-0 max-w-3xl">
         <div className="mb-8">
           <h1 className="font-heading text-3xl font-bold">Settings</h1>
           <p className="text-muted-foreground mt-1">Manage your company information and branding.</p>
@@ -114,12 +115,12 @@ const AdminSettings = () => {
               <CardTitle>Company Logo</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center gap-6">
-                <div className="h-24 w-24 rounded-xl bg-primary flex items-center justify-center overflow-hidden">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                <div className="h-24 w-24 shrink-0 rounded-xl bg-primary flex items-center justify-center overflow-hidden">
                   {logoPreview || settings.logo_url ? (
                     <img src={logoPreview ?? settings.logo_url ?? ""} alt="Logo" className="w-full h-full object-cover" />
                   ) : (
-                    <span className="text-primary-foreground font-heading font-bold text-2xl">CK</span>
+                    <img src={brandIcon} alt="IHomes" width={96} height={96} className="w-full h-full object-contain" />
                   )}
                 </div>
                 <div>
