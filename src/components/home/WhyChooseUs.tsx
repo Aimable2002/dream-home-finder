@@ -40,7 +40,7 @@ export function WhyChooseUs() {
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-12">
           <span className="text-secondary font-medium text-sm uppercase tracking-wider">
-            Why CKIM Homes
+            Why ImenaHomes
           </span>
           <h2 className="heading-2 text-primary-foreground mt-2">
             Why Choose Us

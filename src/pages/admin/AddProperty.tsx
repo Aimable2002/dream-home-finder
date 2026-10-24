@@ -560,7 +560,7 @@ const AddProperty = () => {
                     <Input
                       id="email"
                       type="email"
-                      placeholder="name@ckimhomes.rw"
+                      placeholder="name@imenahomes.rw"
                       value={teamData.email}
                       onChange={(e) => setTeamData({ ...teamData, email: e.target.value })}
                     />

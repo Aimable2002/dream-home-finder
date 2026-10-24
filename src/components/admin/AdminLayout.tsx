@@ -85,7 +85,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
             </div>
             {(!collapsed || isMobile) && (
               <div>
-                <span className="font-heading font-bold text-lg">CKIM</span>
+                <span className="font-heading font-bold text-lg">ImenaHomes</span>
                 <span className="text-xs block text-primary-foreground/80 -mt-1">Admin Panel</span>
               </div>
             )}

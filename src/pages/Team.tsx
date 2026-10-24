@@ -54,7 +54,7 @@ const Team = () => {
               Meet Our Team
             </h1>
             <p className="text-primary-foreground/80 text-lg md:text-xl max-w-2xl mx-auto">
-              The dedicated professionals behind CKIM Homes & Estates.
+              The dedicated professionals behind ImenaHomes.
               We're here to help you find your perfect property in Rwanda.
             </p>
           </div>
@@ -175,7 +175,7 @@ const Team = () => {
                 Our Values
               </h2>
               <p className="text-primary-foreground/80 max-w-xl mx-auto">
-                The principles that guide everything we do at CKIM Homes & Estates.
+                The principles that guide everything we do at ImenaHomes.
               </p>
             </div>
 

@@ -26,9 +26,9 @@ export function Footer() {
       .catch(() => setSettings(null));
   }, []);
 
-  const companyName = settings?.company_name || "CKIM Homes & Estates";
+  const companyName = settings?.company_name || "ImenaHomes";
   const phone = settings?.phone || "+250780000000";
-  const email = settings?.email || "info@ckimhomes.rw";
+  const email = settings?.email || "info@imenahomes.rw";
   const address = settings?.address || "Kigali, Rwanda";
 
   const socialLinks = [
@@ -53,7 +53,7 @@ export function Footer() {
                 )}
               </div>
               <div>
-                <span className="font-heading font-bold text-lg text-white">CKIM</span>
+                <span className="font-heading font-bold text-lg text-white">ImenaHomes</span>
                 <span className="font-heading text-sm block text-primary-foreground/80 -mt-1">Homes & Estates</span>
               </div>
             </Link>

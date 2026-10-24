@@ -24,9 +24,9 @@ export function Header() {
       .catch(() => setSettings(null));
   }, []);
 
-  const companyName = settings?.company_name || "CKIM Homes & Estates";
+  const companyName = settings?.company_name || "ImenaHomes";
   const phone = settings?.phone || "+250780000000";
-  // Split "CKIM Homes & Estates" into a bold first word + smaller subtitle,
+  // Split "ImenaHomes" into a bold first word + smaller subtitle,
   // matching the two-line logo lockup. Falls back gracefully for any name.
   const [nameFirstWord, ...nameRest] = companyName.split(" ");
   const nameSubtitle = nameRest.join(" ");

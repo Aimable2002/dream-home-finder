@@ -98,7 +98,7 @@ export function HeroSection() {
           </h1>
 
           <p className="body-large text-white/90 mb-8 max-w-xl">
-            Buy, rent, or invest with confidence through CKIM Homes & Estates.
+            Buy, rent, or invest with confidence through ImenaHomes.
             Your trusted partner serving Rwanda and the global diaspora community.
           </p>
 

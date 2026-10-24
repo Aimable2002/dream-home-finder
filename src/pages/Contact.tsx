@@ -66,7 +66,7 @@ const Contact = () => {
 
   const phone = settings?.phone || "+250780000000";
   const whatsapp = settings?.whatsapp || "250780000000";
-  const email = settings?.email || "info@ckimhomes.rw";
+  const email = settings?.email || "info@imenahomes.rw";
   const address = settings?.address || "KG 123 Street, Nyarugenge District, Kigali, Rwanda";
 
   const socialLinks = [
