@@ -55,7 +55,7 @@ export function PropertyCard({
           
           {/* Type Badge */}
           <Badge
-            className={`absolute top-3 left-3 ${
+            className={`absolute top-2 left-2 sm:top-3 sm:left-3 px-1.5 sm:px-2.5 text-[10px] sm:text-xs ${
               type === "sale"
                 ? "bg-primary text-primary-foreground"
                 : "bg-secondary text-secondary-foreground"
@@ -66,7 +66,7 @@ export function PropertyCard({
           
           {/* Best Deal Badge */}
           {isBestDeal && (
-            <div className="absolute top-3 right-3">
+            <div className="absolute top-2 right-2 sm:top-3 sm:right-3">
               <span className="sm:hidden"><DealBadge text="DEAL" /></span>
               <span className="hidden sm:inline"><DealBadge /></span>
             </div>
