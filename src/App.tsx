@@ -3,6 +3,9 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
+import { PageNavigation } from "@/components/layout/PageNavigation";
+import { AnalyticsConsent } from "@/components/layout/AnalyticsConsent";
 import { AuthProvider } from "@/hooks/use-auth";
 import { RequireAuth } from "@/components/admin/RequireAuth";
 import Index from "./pages/Index";
@@ -30,7 +33,10 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
+        <HelmetProvider>
         <BrowserRouter>
+          <PageNavigation />
+          <AnalyticsConsent />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/properties" element={<Properties />} />
@@ -100,6 +106,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
+        </HelmetProvider>
       </TooltipProvider>
     </AuthProvider>
   </QueryClientProvider>

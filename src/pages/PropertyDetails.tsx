@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { PropertyCard } from "@/components/property/PropertyCard";
@@ -93,6 +94,19 @@ const PropertyDetails = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <Helmet>
+        <title>{property.title} | ImenaHomes Rwanda</title>
+        <meta name="description" content={`${property.title} for ${property.type === "sale" ? "sale" : "rent"} in ${property.location}. ${formatPrice(property.price, property.type)}. Browse photos and contact ImenaHomes.`} />
+        <meta property="og:title" content={`${property.title} | ImenaHomes Rwanda`} />
+        <meta property="og:description" content={`${property.location} — ${formatPrice(property.price, property.type)}. Explore property photos and details with ImenaHomes.`} />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org", "@type": "RealEstateListing",
+          name: property.title, description: property.description || property.title,
+          url: `/property/${property.id}`,
+          datePosted: property.created_at,
+          offers: { "@type": "Offer", price: property.price, priceCurrency: "USD" },
+        })}</script>
+      </Helmet>
       <Header />
 
       <main className="flex-1">
