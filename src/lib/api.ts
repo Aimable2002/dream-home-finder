@@ -12,6 +12,69 @@
 
 import { supabase } from "@/lib/supabase/client";
 
+// Browser-only Google Analytics. No private credentials enter browser code.
+type AnalyticsWindow = Window & { dataLayer?: unknown[] };
+let analyticsInitialized = false;
+let previousPagePath: string | undefined;
+export const ANALYTICS_CONSENT_KEY = "ihomes-analytics-consent";
+
+export function hasAnalyticsConfiguration(): boolean {
+  return /^G-[A-Z0-9]+$/.test(import.meta.env.VITE_LOVABLE_CONNECTOR_GOOGLE_ANALYTICS_API_KEY || "");
+}
+
+function gtag(..._args: unknown[]) {
+  const analyticsWindow = window as AnalyticsWindow;
+  analyticsWindow.dataLayer = analyticsWindow.dataLayer || [];
+  // gtag.js expects the arguments object rather than an array.
+  // eslint-disable-next-line prefer-rest-params
+  analyticsWindow.dataLayer.push(arguments);
+}
+
+export function getAnalyticsConsent(): string | null {
+  try { return localStorage.getItem(ANALYTICS_CONSENT_KEY); }
+  catch { return null; }
+}
+
+export function setAnalyticsConsent(allowed: boolean): void {
+  try { localStorage.setItem(ANALYTICS_CONSENT_KEY, allowed ? "accepted" : "declined"); }
+  catch { /* Consent applies for this visit even if browser storage is blocked. */ }
+  if (allowed) {
+    initializeAnalytics(true);
+    gtag("consent", "update", { analytics_storage: "granted" });
+    trackPageView(window.location.pathname);
+  } else if (analyticsInitialized) {
+    gtag("consent", "update", { analytics_storage: "denied" });
+  }
+}
+
+export function initializeAnalytics(consentGranted = getAnalyticsConsent() === "accepted"): void {
+  if (analyticsInitialized || !hasAnalyticsConfiguration() || !consentGranted) return;
+  const measurementId = import.meta.env.VITE_LOVABLE_CONNECTOR_GOOGLE_ANALYTICS_API_KEY;
+  analyticsInitialized = true;
+  gtag("consent", "default", {
+    analytics_storage: "granted", ad_storage: "denied",
+    ad_user_data: "denied", ad_personalization: "denied",
+  });
+  gtag("set", "developer_id.dZjgwMW", true);
+  gtag("js", new Date());
+  gtag("config", measurementId, { send_page_view: false, allow_google_signals: false });
+  const script = document.createElement("script");
+  script.async = true;
+  script.id = "ihomes-google-analytics";
+  script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(measurementId)}`;
+  document.head.appendChild(script);
+}
+
+export function trackPageView(pathname: string): void {
+  if (!analyticsInitialized || pathname.startsWith("/admin") || pathname === previousPagePath) return;
+  previousPagePath = pathname;
+  gtag("event", "page_view", {
+    page_path: pathname,
+    page_location: `${window.location.origin}${pathname}`,
+    page_title: document.title,
+  });
+}
+
 // ============================================================================
 // TYPES
 // ============================================================================
