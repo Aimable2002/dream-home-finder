@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { PropertyCard } from "@/components/property/PropertyCard";
@@ -14,12 +15,21 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { getProperties, type PropertyWithImages, type PropertyType } from "@/lib/api";
-import { toPropertyCardProps } from "@/lib/property-utils";
+import { matchesPropertyLocation, toPropertyCardProps } from "@/lib/property-utils";
 
 const Properties = () => {
   const [allProperties, setAllProperties] = useState<PropertyWithImages[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchQuery = searchParams.get("search") || "";
+  const setSearchQuery = (value: string) => {
+    setSearchParams((params) => {
+      if (value) params.set("search", value);
+      else params.delete("search");
+      return params;
+    }, { replace: true });
+  };
+  const [locationFilter, setLocationFilter] = useState("");
   const [listingType, setListingType] = useState<"all" | "sale" | "rent">("all");
   const [priceRange, setPriceRange] = useState([0, 600000]);
   const [propertyType, setPropertyType] = useState<"all" | PropertyType>("all");
@@ -45,17 +55,19 @@ const Properties = () => {
           property.type === "rent"
             ? property.price <= priceRange[1] / 100
             : property.price >= priceRange[0] && property.price <= priceRange[1];
-        return matchesSearch && matchesType && matchesPropertyType && matchesPrice;
+        const matchesLocation = matchesPropertyLocation(property.location, locationFilter);
+        return matchesSearch && matchesType && matchesPropertyType && matchesPrice && matchesLocation;
       })
       .sort((a, b) => {
         if (sortBy === "price-low") return a.price - b.price;
         if (sortBy === "price-high") return b.price - a.price;
         return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
       });
-  }, [allProperties, searchQuery, listingType, propertyType, priceRange, sortBy]);
+  }, [allProperties, searchQuery, listingType, propertyType, priceRange, sortBy, locationFilter]);
 
   const clearFilters = () => {
     setSearchQuery("");
+    setLocationFilter("");
     setListingType("all");
     setPriceRange([0, 600000]);
     setPropertyType("all");
@@ -107,12 +119,25 @@ const Properties = () => {
               <div className="bg-background rounded-xl p-6 shadow-sm sticky top-24">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="font-heading font-semibold text-lg">Filters</h3>
-                  <button
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    aria-label="Close filters"
                     className="lg:hidden text-muted-foreground"
                     onClick={() => setShowFilters(false)}
                   >
                     <X className="h-5 w-5" />
-                  </button>
+                  </Button>
+                </div>
+
+                <div className="mb-6">
+                  <label htmlFor="location-filter" className="text-sm font-medium mb-3 block">Location</label>
+                  <Input
+                    id="location-filter"
+                    placeholder="City, district or neighborhood"
+                    value={locationFilter}
+                    onChange={(event) => setLocationFilter(event.target.value)}
+                  />
                 </div>
 
                 {/* Listing Type */}
@@ -196,7 +221,7 @@ const Properties = () => {
                   <Loader2 className="h-8 w-8 animate-spin text-secondary" />
                 </div>
               ) : filteredProperties.length > 0 ? (
-                <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-6">
                   {filteredProperties.map((property) => (
                     <PropertyCard key={property.id} {...toPropertyCardProps(property)} />
                   ))}

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Phone } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Menu, X, Phone, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { getSettings, type SiteSettings } from "@/lib/api";
 import brandIcon from "@/assets/ihomes-icon.png";
 
@@ -17,6 +18,9 @@ const navLinks = [
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const [settings, setSettings] = useState<SiteSettings | null>(null);
 
   useEffect(() => {
@@ -84,6 +88,18 @@ export function Header() {
             </Link>
           </div>
 
+          <div className="flex items-center gap-1">
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label="Search properties"
+              title="Search properties"
+              aria-expanded={isSearchOpen}
+              aria-controls="header-property-search"
+              onClick={() => setIsSearchOpen((open) => !open)}
+            >
+              <Search className="h-5 w-5" />
+            </Button>
           {/* Mobile Menu Button */}
           <Button
             variant="ghost"
@@ -94,7 +110,34 @@ export function Header() {
           >
             {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </Button>
+          </div>
         </div>
+
+        {isSearchOpen && (
+          <form
+            id="header-property-search"
+            role="search"
+            className="flex gap-2 border-t border-border py-3"
+            onSubmit={(event) => {
+              event.preventDefault();
+              navigate(`/properties${searchQuery.trim() ? `?search=${encodeURIComponent(searchQuery.trim())}` : ""}`);
+              setIsSearchOpen(false);
+              setIsMenuOpen(false);
+            }}
+          >
+            <Input
+              autoFocus
+              aria-label="Search properties by name or location"
+              placeholder="Property name or location"
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
+              className="min-w-0"
+            />
+            <Button type="submit" size="icon" className="shrink-0" aria-label="Submit property search">
+              <Search className="h-5 w-5" />
+            </Button>
+          </form>
+        )}
 
         {/* Mobile Navigation */}
         {isMenuOpen && (

@@ -3,6 +3,10 @@ import type { PropertyCardProps } from "@/components/property/PropertyCard";
 
 const FALLBACK_IMAGE = "/placeholder.svg";
 
+export function matchesPropertyLocation(location: string, query: string): boolean {
+  return location.toLowerCase().includes(query.trim().toLowerCase());
+}
+
 export function coverImageUrl(property: PropertyWithImages): string {
   const cover = property.property_images.find((img) => img.is_cover);
   return cover?.url ?? property.property_images[0]?.url ?? FALLBACK_IMAGE;
