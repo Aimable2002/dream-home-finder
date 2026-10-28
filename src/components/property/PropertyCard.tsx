@@ -67,22 +67,23 @@ export function PropertyCard({
           {/* Best Deal Badge */}
           {isBestDeal && (
             <div className="absolute top-3 right-3">
-              <DealBadge />
+              <span className="sm:hidden"><DealBadge text="DEAL" /></span>
+              <span className="hidden sm:inline"><DealBadge /></span>
             </div>
           )}
           
           {/* Price */}
           <div className="absolute bottom-3 left-3 right-3 break-words">
-            <span className="text-primary-foreground font-heading font-bold text-xl">
+            <span className="text-primary-foreground font-heading font-bold text-sm sm:text-xl">
               {formatPrice(price)}
-              {type === "rent" && <span className="text-sm font-normal">/mo</span>}
+              {type === "rent" && <span className="text-xs sm:text-sm font-normal">/mo</span>}
             </span>
           </div>
         </div>
 
         {/* Content */}
-        <CardContent className="p-4">
-          <h3 className="font-heading font-semibold text-lg text-foreground line-clamp-1 mb-2 group-hover:text-secondary transition-colors">
+        <CardContent className="p-2.5 sm:p-4">
+          <h3 className="font-heading font-semibold text-sm sm:text-lg text-foreground line-clamp-2 sm:line-clamp-1 min-h-10 sm:min-h-0 mb-2 group-hover:text-secondary transition-colors">
             {title}
           </h3>
           
@@ -92,7 +93,7 @@ export function PropertyCard({
           </div>
           
           {/* Features */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm text-muted-foreground border-t border-border pt-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground border-t border-border pt-3 [&_svg]:shrink-0">
             <div className="flex items-center gap-1">
               <Bed className="h-4 w-4" />
               <span>{bedrooms}</span>

@@ -299,7 +299,7 @@ const PropertyDetails = () => {
           {similarProperties.length > 0 && (
             <section className="mt-16">
               <h2 className="font-heading text-2xl font-bold mb-8">Similar Properties</h2>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
                 {similarProperties.map((p) => (
                   <PropertyCard key={p.id} {...toPropertyCardProps(p)} />
                 ))}
