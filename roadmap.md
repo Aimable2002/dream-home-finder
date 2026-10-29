@@ -1,9 +1,9 @@
 # Roadmap
 
-- [ ] Verify scrolling to the top on page navigation and first load
+- [x] Verify scrolling to the top on page navigation and first load
 - [ ] Verify consent-based Google Analytics using the linked measurement ID
-- [ ] Complete metadata, verification and sitemap setup for https://imenahomes.site/ and check Google indexing status
-- [ ] Follow the existing Git-to-Netlify deployment workflow; check the live verification tag and sitemap after Netlify updates
+- [x] Complete metadata, verification and sitemap setup for https://imenahomes.site/ and check Google indexing status — Google verified ownership, downloaded 8 URLs without errors, and reports homepage indexed
+- [x] Follow the existing Git-to-Netlify deployment workflow; check the live verification tag and sitemap after Netlify updates
 
 - [x] Add header property search and listing location filter
 - [x] Show two property cards per row on phones; search checked live and populated location/card flow checked with fixtures

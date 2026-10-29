@@ -18,9 +18,11 @@ let analyticsInitialized = false;
 let previousPagePath: string | undefined;
 let currentVisitConsent: boolean | undefined;
 export const ANALYTICS_CONSENT_KEY = "ihomes-analytics-consent";
+// GA4 measurement IDs are public browser configuration, not private credentials.
+const analyticsMeasurementId = import.meta.env.VITE_LOVABLE_CONNECTOR_GOOGLE_ANALYTICS_API_KEY || "G-56S5KD8RPS";
 
 export function hasAnalyticsConfiguration(): boolean {
-  return /^G-[A-Z0-9]+$/.test(import.meta.env.VITE_LOVABLE_CONNECTOR_GOOGLE_ANALYTICS_API_KEY || "");
+  return /^G-[A-Z0-9]+$/.test(analyticsMeasurementId);
 }
 
 function gtag(..._args: unknown[]) {
@@ -52,7 +54,7 @@ export function setAnalyticsConsent(allowed: boolean): void {
 
 export function initializeAnalytics(consentGranted = getAnalyticsConsent() === "accepted"): void {
   if (analyticsInitialized || !hasAnalyticsConfiguration() || !consentGranted || window.location.pathname.startsWith("/admin")) return;
-  const measurementId = import.meta.env.VITE_LOVABLE_CONNECTOR_GOOGLE_ANALYTICS_API_KEY;
+  const measurementId = analyticsMeasurementId;
   analyticsInitialized = true;
   gtag("consent", "default", {
     analytics_storage: "granted", ad_storage: "denied",
