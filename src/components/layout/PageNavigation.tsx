@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { getPageMetadata } from "@/lib/seo";
+import { getPageMetadata, publicOrigin } from "@/lib/seo";
 import { initializeAnalytics, trackPageView } from "@/lib/api";
 
 export function PageNavigation() {
@@ -29,10 +29,10 @@ export function PageNavigation() {
       <title>{metadata.title}</title>
       <meta name="description" content={metadata.description} />
       <meta name="robots" content={metadata.noindex ? "noindex, nofollow" : "index, follow"} />
-      <link rel="canonical" href={pathname} />
+      <link rel="canonical" href={`${publicOrigin}${pathname}`} />
       <meta property="og:title" content={metadata.title} />
       <meta property="og:description" content={metadata.description} />
-      <meta property="og:url" content={pathname} />
+      <meta property="og:url" content={`${publicOrigin}${pathname}`} />
       <meta property="og:type" content="website" />
       <meta name="twitter:title" content={metadata.title} />
       <meta name="twitter:description" content={metadata.description} />

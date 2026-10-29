@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { getProperty, getProperties, getSettings, incrementPropertyViews, type PropertyWithImages, type SiteSettings } from "@/lib/api";
 import { toPropertyCardProps, formatPrice } from "@/lib/property-utils";
+import { publicOrigin } from "@/lib/seo";
 
 const PropertyDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -102,7 +103,7 @@ const PropertyDetails = () => {
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org", "@type": "RealEstateListing",
           name: property.title, description: property.description || property.title,
-          url: `/property/${property.id}`,
+          url: `${publicOrigin}/property/${property.id}`,
           datePosted: property.created_at,
           offers: { "@type": "Offer", price: property.price, priceCurrency: "USD" },
         })}</script>

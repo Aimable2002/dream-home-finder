@@ -1,8 +1,8 @@
 # Roadmap
 
-- [ ] Reset scrolling to the top on page navigation and first load
-- [ ] Configure Google Analytics with the user's measurement ID
-- [ ] Add route metadata and search-engine setup; verify Search Console and submit sitemap when a public URL is available
+- [ ] Verify scrolling to the top on page navigation and first load
+- [ ] Verify consent-based Google Analytics using the linked measurement ID
+- [ ] Complete metadata, verification and sitemap setup for https://imenahomes.site/ and check Google indexing status
 
 - [x] Add header property search and listing location filter
 - [x] Show two property cards per row on phones; search checked live and populated location/card flow checked with fixtures
