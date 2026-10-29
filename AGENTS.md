@@ -6,3 +6,4 @@
 - Centralize pathname navigation effects and route metadata in PageNavigation; query-only filter changes must not reset scroll or create analytics page views.
 - Keep browser Analytics service loading and event calls in src/lib/api.ts; load only with optional analytics consent and exclude admin pages and query strings.
 - Use Helmet for route metadata and index.html for static crawler fallbacks; generate sitemap URLs only after a real public origin exists.
+- Keep the public sitemap limited to existing public pages and listing IDs; refresh listing entries when inventory changes, and omit lastmod unless authoritative significant page-change timestamps are available.

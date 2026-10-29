@@ -16,6 +16,7 @@ import { supabase } from "@/lib/supabase/client";
 type AnalyticsWindow = Window & { dataLayer?: unknown[] };
 let analyticsInitialized = false;
 let previousPagePath: string | undefined;
+let currentVisitConsent: boolean | undefined;
 export const ANALYTICS_CONSENT_KEY = "ihomes-analytics-consent";
 
 export function hasAnalyticsConfiguration(): boolean {
@@ -36,6 +37,7 @@ export function getAnalyticsConsent(): string | null {
 }
 
 export function setAnalyticsConsent(allowed: boolean): void {
+  currentVisitConsent = allowed;
   try { localStorage.setItem(ANALYTICS_CONSENT_KEY, allowed ? "accepted" : "declined"); }
   catch { /* Consent applies for this visit even if browser storage is blocked. */ }
   if (allowed) {
@@ -44,11 +46,12 @@ export function setAnalyticsConsent(allowed: boolean): void {
     trackPageView(window.location.pathname);
   } else if (analyticsInitialized) {
     gtag("consent", "update", { analytics_storage: "denied" });
+    previousPagePath = undefined;
   }
 }
 
 export function initializeAnalytics(consentGranted = getAnalyticsConsent() === "accepted"): void {
-  if (analyticsInitialized || !hasAnalyticsConfiguration() || !consentGranted) return;
+  if (analyticsInitialized || !hasAnalyticsConfiguration() || !consentGranted || window.location.pathname.startsWith("/admin")) return;
   const measurementId = import.meta.env.VITE_LOVABLE_CONNECTOR_GOOGLE_ANALYTICS_API_KEY;
   analyticsInitialized = true;
   gtag("consent", "default", {
@@ -57,7 +60,10 @@ export function initializeAnalytics(consentGranted = getAnalyticsConsent() === "
   });
   gtag("set", "developer_id.dZjgwMW", true);
   gtag("js", new Date());
-  gtag("config", measurementId, { send_page_view: false, allow_google_signals: false });
+  gtag("config", measurementId, {
+    send_page_view: false, allow_google_signals: false,
+    page_location: `${window.location.origin}${window.location.pathname}`,
+  });
   const script = document.createElement("script");
   script.async = true;
   script.id = "ihomes-google-analytics";
@@ -66,7 +72,8 @@ export function initializeAnalytics(consentGranted = getAnalyticsConsent() === "
 }
 
 export function trackPageView(pathname: string): void {
-  if (!analyticsInitialized || pathname.startsWith("/admin") || pathname === previousPagePath) return;
+  const consentGranted = currentVisitConsent ?? (getAnalyticsConsent() === "accepted");
+  if (!analyticsInitialized || !consentGranted || pathname.startsWith("/admin") || pathname === previousPagePath) return;
   previousPagePath = pathname;
   gtag("event", "page_view", {
     page_path: pathname,

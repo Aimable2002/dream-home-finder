@@ -1,3 +1,5 @@
+export const publicOrigin = "https://imenahomes.site";
+
 export const publicPageMetadata: Record<string, { title: string; description: string }> = {
   "/": {
     title: "ImenaHomes | Houses for Sale & Rent in Rwanda",
