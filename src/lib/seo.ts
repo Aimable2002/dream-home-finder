@@ -1,5 +1,26 @@
 export const publicOrigin = "https://imenahomes.site";
 
+export const publicPageNames: Record<string, string> = {
+  "/properties": "Properties for Sale & Rent",
+  "/best-deals": "Best Property Deals",
+  "/team": "Our Team",
+  "/about": "About ImenaHomes",
+  "/contact": "Contact ImenaHomes",
+};
+
+export function getBreadcrumbSchema(pathname: string) {
+  const name = publicPageNames[pathname];
+  if (!name) return null;
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "ImenaHomes", item: `${publicOrigin}/` },
+      { "@type": "ListItem", position: 2, name, item: `${publicOrigin}${pathname}` },
+    ],
+  };
+}
+
 export const publicPageMetadata: Record<string, { title: string; description: string }> = {
   "/": {
     title: "ImenaHomes | Houses for Sale & Rent in Rwanda",

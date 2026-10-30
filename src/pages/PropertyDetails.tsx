@@ -20,7 +20,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { getProperty, getProperties, getSettings, incrementPropertyViews, type PropertyWithImages, type SiteSettings } from "@/lib/api";
-import { toPropertyCardProps, formatPrice } from "@/lib/property-utils";
+import { toPropertyCardProps, formatPrice, propertyWhatsAppUrl } from "@/lib/property-utils";
 import { publicOrigin } from "@/lib/seo";
 
 const PropertyDetails = () => {
@@ -90,7 +90,7 @@ const PropertyDetails = () => {
     setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   };
 
-  const whatsapp = settings?.whatsapp || "250780000000";
+  const whatsappUrl = propertyWhatsAppUrl(settings?.whatsapp, toPropertyCardProps(property));
   const phone = settings?.phone || "+250780000000";
 
   return (
@@ -290,17 +290,17 @@ const PropertyDetails = () => {
                       Call Us
                     </Button>
                   </a>
-                  <a
-                    href={`https://wa.me/${whatsapp}?text=Hi, I'm interested in ${encodeURIComponent(property.title)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full block"
-                  >
-                    <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-primary-foreground" size="lg">
-                      <MessageCircle className="h-5 w-5 mr-2" />
-                      WhatsApp
+                  {whatsappUrl ? (
+                    <Button asChild className="w-full" size="lg">
+                      <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+                        <MessageCircle className="h-5 w-5 mr-2" /> WhatsApp
+                      </a>
                     </Button>
-                  </a>
+                  ) : (
+                    <Button disabled className="w-full" size="lg" title="WhatsApp number unavailable">
+                      <MessageCircle className="h-5 w-5 mr-2" /> WhatsApp
+                    </Button>
+                  )}
                 </div>
 
                 <p className="text-xs text-muted-foreground text-center mt-4">

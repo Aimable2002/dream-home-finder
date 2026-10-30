@@ -8,3 +8,5 @@
 - Keep the public GA measurement ID available as a fallback with an environment override so external hosting does not depend on Lovable-injected configuration.
 - Use Helmet for route metadata and index.html for static crawler fallbacks; generate sitemap URLs only after a real public origin exists.
 - Keep the public sitemap limited to existing public pages and listing IDs; refresh listing entries when inventory changes, and omit lastmod unless authoritative significant page-change timestamps are available.
+- Share property inquiries through one WhatsApp URL builder and a shared cached settings query; use the configured owner number without fabricated fallbacks, and keep contact links outside card navigation links to avoid nested anchors.
+- Use factual WebSite identity and route breadcrumbs for search presentation; never add invented sitelink markup or promise Google-selected results.
