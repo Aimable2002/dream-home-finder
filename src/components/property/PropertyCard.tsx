@@ -3,6 +3,7 @@ import { MapPin, Bed, Bath, Car, Maximize } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { DealBadge } from "./DealBadge";
+import { PropertyWhatsAppButton } from "./PropertyWhatsAppButton";
 
 export interface PropertyCardProps {
   id: string;
@@ -40,8 +41,8 @@ export function PropertyCard({
   };
 
   return (
-    <Link to={`/property/${id}`} className="block min-w-0">
-      <Card className="group overflow-hidden border-border hover:border-secondary/50 transition-all duration-300 hover:shadow-lg">
+      <Card className="group min-w-0 overflow-hidden border-border hover:border-secondary/50 transition-all duration-300 hover:shadow-lg">
+        <Link to={`/property/${id}`} className="block min-w-0">
         {/* Image Container */}
         <div className="relative aspect-[4/3] overflow-hidden">
           <img
@@ -112,7 +113,10 @@ export function PropertyCard({
             </div>
           </div>
         </CardContent>
+        </Link>
+        <div className="px-2.5 pb-2.5 sm:px-4 sm:pb-4">
+          <PropertyWhatsAppButton property={{ id, title, price, location, type, image, bedrooms, bathrooms, parking, size, isBestDeal }} />
+        </div>
       </Card>
-    </Link>
   );
 }

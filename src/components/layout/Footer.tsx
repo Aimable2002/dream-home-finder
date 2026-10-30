@@ -5,10 +5,10 @@ import { getSettings, type SiteSettings } from "@/lib/api";
 import brandIcon from "@/assets/ihomes-icon.png";
 
 const quickLinks = [
-  { name: "Properties", path: "/properties" },
-  { name: "Best Deals", path: "/best-deals" },
-  { name: "About Us", path: "/about" },
-  { name: "Contact", path: "/contact" },
+  { name: "Properties for Sale & Rent", path: "/properties" },
+  { name: "Best Property Deals", path: "/best-deals" },
+  { name: "About ImenaHomes", path: "/about" },
+  { name: "Contact ImenaHomes", path: "/contact" },
 ];
 
 const propertyTypes = [

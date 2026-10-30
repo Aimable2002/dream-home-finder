@@ -1,5 +1,6 @@
 import type { PropertyWithImages } from "@/lib/api";
 import type { PropertyCardProps } from "@/components/property/PropertyCard";
+import { publicOrigin } from "@/lib/seo";
 
 const FALLBACK_IMAGE = "/placeholder.svg";
 
@@ -35,4 +36,25 @@ export function formatPrice(price: number, type: "sale" | "rent"): string {
     maximumFractionDigits: 0,
   }).format(price);
   return type === "rent" ? `${formatted}/mo` : formatted;
+}
+
+export function propertyWhatsAppUrl(
+  number: string | null | undefined,
+  property: PropertyCardProps,
+): string | null {
+  const digits = number?.replace(/[\s()+.-]/g, "") ?? "";
+  if (!/^[1-9]\d{6,14}$/.test(digits)) return null;
+  const detailsUrl = `${publicOrigin}/property/${encodeURIComponent(property.id)}`;
+  const imageUrl = new URL(property.image, publicOrigin).href;
+  const message = [
+    `Hello ImenaHomes, I'm interested in this property:`,
+    property.title,
+    `For ${property.type === "sale" ? "sale" : "rent"} — ${formatPrice(property.price, property.type)}`,
+    `Location: ${property.location}`,
+    `Bedrooms: ${property.bedrooms} | Bathrooms: ${property.bathrooms} | Parking: ${property.parking}`,
+    ...(property.size > 0 ? [`Size: ${property.size} m²`] : []),
+    `Photo: ${imageUrl}`,
+    `Property details: ${detailsUrl}`,
+  ].join("\n");
+  return `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
 }

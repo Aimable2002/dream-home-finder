@@ -1,12 +1,13 @@
 import { useEffect, useLayoutEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { getPageMetadata, publicOrigin } from "@/lib/seo";
+import { getPageMetadata, getBreadcrumbSchema, publicOrigin } from "@/lib/seo";
 import { initializeAnalytics, trackPageView } from "@/lib/api";
 
 export function PageNavigation() {
   const { pathname } = useLocation();
   const metadata = getPageMetadata(pathname);
+  const breadcrumbSchema = getBreadcrumbSchema(pathname);
 
   useLayoutEffect(() => {
     const previous = window.history.scrollRestoration;
@@ -36,6 +37,7 @@ export function PageNavigation() {
       <meta property="og:type" content="website" />
       <meta name="twitter:title" content={metadata.title} />
       <meta name="twitter:description" content={metadata.description} />
+      {breadcrumbSchema && <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>}
     </Helmet>
   );
 }
