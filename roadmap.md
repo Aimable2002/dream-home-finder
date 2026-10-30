@@ -1,7 +1,7 @@
 # Roadmap
 
 - [x] Verify scrolling to the top on page navigation and first load
-- [ ] Verify consent-based Google Analytics using the linked measurement ID
+- [x] Verify consent-based Google Analytics using the linked measurement ID — live Netlify banner and script checked; Google collection returned HTTP 204 after acceptance
 - [x] Complete metadata, verification and sitemap setup for https://imenahomes.site/ and check Google indexing status — Google verified ownership, downloaded 8 URLs without errors, and reports homepage indexed
 - [x] Follow the existing Git-to-Netlify deployment workflow; check the live verification tag and sitemap after Netlify updates
 
