@@ -1,5 +1,8 @@
 # Roadmap
 
+- [ ] Add property-card WhatsApp contact with listing details, cover photo link and public details link; verify real listings
+- [ ] Strengthen branded Google search presentation for selected public pages and explain Google's sitelink control
+
 - [x] Verify scrolling to the top on page navigation and first load
 - [x] Verify consent-based Google Analytics using the linked measurement ID — live Netlify banner and script checked; Google collection returned HTTP 204 after acceptance
 - [x] Complete metadata, verification and sitemap setup for https://imenahomes.site/ and check Google indexing status — Google verified ownership, downloaded 8 URLs without errors, and reports homepage indexed
